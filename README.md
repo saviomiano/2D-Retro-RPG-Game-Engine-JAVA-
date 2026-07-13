@@ -3,7 +3,7 @@
 This branch houses the foundational engine logic and coordinate layout for the 2D RPG. Before developing complex graphical viewports, this initial milestone establishes the structural game state matrix, player movement mechanics, and strict spatial boundary constraints entirely within a console environment.
 
 ## 📺 Live Matrix Preview
-![Milestone 1 Logic In Action](Preview.mp4)
+![Milestone 1 Logic In Action](Preview.gif)
 
 ---
 
