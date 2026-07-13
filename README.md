@@ -1,51 +1,41 @@
-# 2D Retro RPG Game Engine (In Active Development)
+# Milestone 2: Graphical Overworld Interface & Vector Render Loops
 
-A standalone 2D retro-style RPG built completely from scratch using Java Swing. This project is a hands-on exploration of scene management, cinematic animation handling, custom pixel art design, and game audio systems.
+This branch marks the transition of the RPG engine from a console-based text matrix into a standalone desktop application window. This milestone isolates the development of the graphical overworld exploration layer, using automated coordinate drawing loops and pre-rendered graphic assets.
 
----
-
-## The Vision: A Standalone Gaming Experience
-
-The gameplay seamlessly balances two main environments:
-1. **The Overworld Map:** A top-down exploration screen where the player navigates predefined paths.
-2. **The Cinematic Battle & Story Screen:** A dedicated scene that dynamically displays animated sequences, turn-based combat, and text-based dialogue containers.
+## Live Overworld Preview
+![Milestone 2 GUI In Action](Map.png)
 
 ---
 
-## Project Roadmap & Development Progress
+## Architectural Overview
 
-This game is built using a structured development lifecycle. Progress is tracked across clear milestones so you can see exactly how the engine evolves step-by-step.
-
-### Milestone 1: The World Map Layout (COMPLETED)
-* **What I Built:** The foundational map environment grid.
-* **The Engineering:** Instead of drawing individual path lines manually, I implemented mathematical loops using Java's `Graphics2D` engine.
-* This automatically maps out clean path channels for the player to follow, decoupling the structural path logic from hardcoded positions.
-
-### Milestone 2: Cinematic Animations & Art Pipelines (IN PROGRESS)
-* **The Creative Focus:** I am using **LibreSprite** to create custom frame-by-frame pixel art loops for multiple critical game phases
-  * **Pin Movement:** Controls to allow pin navigation across map nodes.
-  * **Intro Sequences:** Animations to set the stage before the player starts moving.
-  * **Dynamic Fight Sequences:** Combat movements, strikes, and reactions rather than just standing still.
-  * **Game Endings:** Victory animation when the adventure concludes.
-* **The Integration:** Exporting these timelines as loop-enabled `.gif` files, allowing Java’s background rendering engine to play complex animations smoothly without heavy frame rate drops.
-
-### Milestone 3: Battle & Dialogue Systems (UPCOMING)
-* **Scene Swapping:** Implementing a container manager (`CardLayout`) to act as a scene engine, instantly swapping the window from the Map view to the Combat arena when an encounter triggers.
-* **Dialogue Engine:** Constructing a graphics-based text system to display story narratives, combat notifications, and character text boxes directly on-screen.
-
-### Milestone 4: Audio & Collisions (BACKLOG)
-* **Dynamic Audio:** Utilizing Java's native `AudioSystem` clips to handle contextual background soundtracks.
-* **Collision Triggers:** Programming bounding-box detection to capture exactly when the player steps onto an encounter tile.
+The application moves out of the terminal environment by utilizing Java's native **Abstract Window Toolkit (AWT)** and **Swing** frameworks:
+1. **`JFrame` (Application Shell):** Serves as the independent native OS window wrapper, setting up window boundaries, close routines, and basic container sizing.
+2. **`GamePanel` (Render Canvas):** A custom class extending `JPanel` that overrides the native graphics pipeline (`paintComponent`) to act as a double-buffered vector canvas.
 
 ---
 
-## Visualizing the Evolution (Git Branches)
+## Key Engineering Concepts Implemented
 
-To look at how this game was built over time, you can switch between these dedicated development snapshots in the repository:
-* **`main`**: The current master folder featuring the most up-to-date active systems (Currently Not In Progress).
-* **`milestone-1-map-layout`**: A look at the early code featuring just the foundational path loop math and geometry layout.
-* **`milestone-2-graphical-overworld`**: Tracks the jump into desktop windows, layout rendering loops, and asset paths.
+### 1. Programmatic Path Rendering Loops
+Instead of drawing individual environmental paths manually using hardcoded, static layout methods, the overworld map builds its pathways programmatically. Using incremental `for`-loops inside the graphics pipeline, it draws segments of `line.png` and `VLine.png` spaced evenly across coordinate intervals (e.g., `pathY += 15`):
+* **Dynamic Grid Mapping:** Automatically paths complex multi-turn corridors across the window container dimensions.
+* **Decoupled Coordinates:** Changes to map scale or lane density can be modified natively within the algorithmic loop bounds rather than re-plotting every visual asset.
+
+### 2. Native File Asset Ingestion Pipeline
+Pre-rendered external image assets are processed through Java's `ImageIcon` layout bridge to transform raw file data into high-performance `Image` buffers memory-ready for painting:
+* **Interactive Elements Spawning:** Maps clear pixel layouts to dynamically draw the player pin marker, static checkpoint encounters (`x.png`), level checkpoints (`level-up.png`), enemy nodes (`skull.png`), and destination markers (`boss.png`, `house.png`).
+
+### 3. Active Window Refresh Optimization
+Leverages `super.paintComponent(g)` at the start of every render pass to manage smooth canvas resets. This ensures that when entities move or backgrounds refresh, previous graphic traces are instantly cleared from the computer's memory buffers, preventing screen tearing or sprite bleeding.
 
 ---
 
-*Built by **Savio Miano** — 
+## Creative Assets Integrated
+All graphics are rendered using custom, retro-handheld pixel assets imported directly into the engine layout directory:
+* `skull.png` – Enemy encounter nodes
+* `house.png` / `boss.png` – Hub areas and final challenge zones
+* `line.png` / `VLine.png` – Horizontal and vertical corridor tracks
+
+---
+*This branch tracks the UI layer evolution of the project. See the master (`main`) branch for active developments involving LibreSprite cinematic animations (intro, battle, endings), CardLayout scene controllers, and audio engines.*
