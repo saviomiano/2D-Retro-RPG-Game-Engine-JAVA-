@@ -1,50 +1,38 @@
-# 2D Retro RPG Game Engine (In Active Development)
+# Milestone 1: Core 2D Grid Matrix & Input State Loop
 
-A standalone 2D retro-style RPG built completely from scratch using Java Swing. This project is a hands-on exploration of scene management, cinematic animation handling, custom pixel art design, and game audio systems.
+This branch houses the foundational engine logic and coordinate layout for the 2D RPG. Before developing complex graphical viewports, this initial milestone establishes the structural game state matrix, player movement mechanics, and strict spatial boundary constraints entirely within a console environment.
 
----
-
-## The Vision: A Standalone Gaming Experience
-
-The gameplay seamlessly balances two main environments:
-1. **The Overworld Map:** A top-down exploration screen where the player navigates predefined paths.
-2. **The Cinematic Battle & Story Screen:** A dedicated scene that dynamically displays animated sequences, turn-based combat, and text-based dialogue containers.
+## 📺 Live Matrix Preview
+![Milestone 1 Logic In Action](Preview.gif)
 
 ---
 
-## Project Roadmap & Development Progress
+## Architectural Overview & Mechanics
 
-This game is built using a structured development lifecycle. Progress is tracked across clear milestones so you can see exactly how the engine evolves step-by-step.
+The engine relies on a modular, decoupled structure splitting execution responsibility across three primary controller classes:
 
-### Milestone 1: The World Map Layout (COMPLETED)
-* **What I Built:** The foundational map environment grid.
-* **The Engineering:** Instead of drawing individual path lines manually, I implemented mathematical loops using Java's `Graphics2D` engine.
-* This automatically maps out clean path channels for the player to follow, decoupling the structural path logic from hardcoded positions.
-
-### Milestone 2: Cinematic Animations & Art Pipelines (IN PROGRESS)
-* **The Creative Focus:** I am using **LibreSprite** to create custom frame-by-frame pixel art loops for multiple critical game phases
-  * **Pin Movement:** Controls to allow pin navigation across map nodes.
-  * **Intro Sequences:** Animations to set the stage before the player starts moving.
-  * **Dynamic Fight Sequences:** Combat movements, strikes, and reactions rather than just standing still.
-  * **Game Endings:** Victory animation when the adventure concludes.
-* **The Integration:** Exporting these timelines as loop-enabled `.gif` files, allowing Java’s background rendering engine to play complex animations smoothly without heavy frame rate drops.
-
-### Milestone 3: Battle & Dialogue Systems (UPCOMING)
-* **Scene Swapping:** Implementing a container manager (`CardLayout`) to act as a scene engine, instantly swapping the window from the Map view to the Combat arena when an encounter triggers.
-* **Dialogue Engine:** Constructing a graphics-based text system to display story narratives, combat notifications, and character text boxes directly on-screen.
-
-### Milestone 4: Audio & Collisions (BACKLOG)
-* **Dynamic Audio:** Utilizing Java's native `AudioSystem` clips to handle contextual background soundtracks.
-* **Collision Triggers:** Programming bounding-box detection to capture exactly when the player steps onto an encounter tile.
+1. **`Dungeon.java` (Application Entrypoint):** Instantiates the game state and kicks off the core execution loops.
+2. **`Player.java` (Input Handlers):** Manages real-time data ingestion using a `Scanner` stream to capture movement vectors (`w`, `a`, `s`, `d`) and logs the player's immediate coordinate indexes.
+3. **`DungeonMap.java` (State Matrix & Logic):** Directs matrix transformations, handles tile re-rendering, and enforces collision maps.
 
 ---
 
-## Visualizing the Evolution (Git Branches)
+## Key Engineering Concepts Implemented
 
-To look at how this game was built over time, you can switch between these dedicated development snapshots in the repository:
-* **`main`**: The current master folder featuring the most up-to-date active systems (Currently Not In Progress).
-* **`milestone-1-map-layout`**: A look at the early code featuring just the foundational path loop math and geometry layout.
+### 1. 2D Coordinate Matrix
+The world is mapped onto a 3/3 memory grid using a 2D String array matrix (`String[][] map`). This acts as the structural proof-of-concept for spawning entities programmatically at targeted indexes:
+* `[X]` - Dynamic Player Entity Marker
+* `[E]` - Enemy Static Encounter Tile
+* `[B]` - Boss Encounter Tile
+
+### 2. State Mutation & Render Cycles
+The game utilizes an active update loop (`Update()`). When valid movement inputs are received, a sequential transactional operation is triggered:
+1. The player’s historical grid position index is wiped and reset to a clean tile (`[ ]`).
+2. Coordinate indices (`Row`, `Col`) are updated based on the directional direction vector.
+3. The new target index is populated with the entity marker (`[X]`) and the matrix is printed immediately to the terminal output stream.
+
+### 3. Algorithmic Border Constraints (Edge Detection)
+To maintain structural stability and prevent application crashes, the update loop utilizes conditional guard clauses before index modifications. These boundary checks safely stop the player from stepping out of bounds and throwing an `ArrayIndexOutOfBoundsException`.
 
 ---
-
-*Built by **Savio Miano** — 
+*This branch acts as a historical freeze point showing my progress learning Java. See the master branch for the upgraded GUI-driven implementation featuring custom pixel art animations and sound system pipelines.*****
