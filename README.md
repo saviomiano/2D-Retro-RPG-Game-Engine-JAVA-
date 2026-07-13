@@ -44,6 +44,7 @@ This game is built using a structured development lifecycle. Progress is tracked
 To look at how this game was built over time, you can switch between these dedicated development snapshots in the repository:
 * **`main`**: The current master folder featuring the most up-to-date active systems (Currently Not In Progress).
 * **`milestone-1-map-layout`**: A look at the early code featuring just the foundational path loop math and geometry layout.
+* **`milestone-2-graphical-overworld`**: Tracks the jump into desktop windows, layout rendering loops, and asset paths.
 
 ---
 
